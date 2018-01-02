@@ -1,0 +1,258 @@
+best_bledy_naive<-cbind(
+		c(blad_1M_new[,1]),
+		c(blad_3M_new[,1],rep(NA,2)),
+		c(blad_6M_new[,1],rep(NA,5)),
+		c(blad_12M_new[,1],rep(NA,11))
+)
+
+best_bledy_rw<-cbind(
+		c(blad_1M_new[,2]),
+		c(blad_3M_new[,2],rep(NA,2)),
+		c(blad_6M_new[,2],rep(NA,5)),
+		c(blad_12M_new[,2],rep(NA,11))
+)
+
+best_bledy_arma<-cbind(
+	c(
+		blad_1M_new[Regimes[[1]],2+R1ARMA[[1]]],
+		blad_1M_new[Regimes[[2]],2+R2ARMA[[1]]],
+		blad_1M_new[Regimes[[3]],2+R3ARMA[[1]]]
+	),
+	c(
+		blad_3M_new[Regimes[[1]],2+R1ARMA[[2]]],
+		blad_3M_new[Regimes[[2]],2+R2ARMA[[2]]],
+		blad_3M_new[Regimes[[3]][Regimes[[3]]<=53],2+R3ARMA[[2]]],
+		rep(NA,2)
+	),
+	c(
+		blad_6M_new[Regimes[[1]],2+R1ARMA[[3]]],
+		blad_6M_new[Regimes[[2]],2+R2ARMA[[3]]],
+		blad_6M_new[Regimes[[3]][Regimes[[3]]<=50],2+R3ARMA[[3]]],
+		rep(NA,5)
+	),
+	c(
+		blad_12M_new[Regimes[[1]],2+R1ARMA[[4]]],
+		blad_12M_new[Regimes[[2]],2+R2ARMA[[4]]],
+		blad_12M_new[Regimes[[3]][Regimes[[3]]<=44],2+R3ARMA[[4]]],
+		rep(NA,11)
+	)
+)
+
+best_bledy_armaxs<-cbind(
+	c(
+		blad_1M_new[Regimes[[1]],11+R1ARMAXS[[1]]],
+		blad_1M_new[Regimes[[2]],11+R2ARMAXS[[1]]],
+		blad_1M_new[Regimes[[3]],11+R3ARMAXS[[1]]]
+	),
+	c(
+		blad_3M_new[Regimes[[1]],11+R1ARMAXS[[2]]],
+		blad_3M_new[Regimes[[2]],11+R2ARMAXS[[2]]],
+		blad_3M_new[Regimes[[3]][Regimes[[3]]<=53],11+R3ARMAXS[[2]]],
+		rep(NA,2)
+	),
+	c(
+		blad_6M_new[Regimes[[1]],11+R1ARMAXS[[3]]],
+		blad_6M_new[Regimes[[2]],11+R2ARMAXS[[3]]],
+		blad_6M_new[Regimes[[3]][Regimes[[3]]<=50],11+R3ARMAXS[[3]]],
+		rep(NA,5)
+	),
+	c(
+		blad_12M_new[Regimes[[1]],11+R1ARMAXS[[4]]],
+		blad_12M_new[Regimes[[2]],11+R2ARMAXS[[4]]],
+		blad_12M_new[Regimes[[3]][Regimes[[3]]<=44],11+R3ARMAXS[[4]]],
+		rep(NA,11)
+	)
+)
+
+best_bledy_armaxw<-cbind(
+	c(
+		blad_1M_new[Regimes[[1]],20+R1ARMAXW[[1]]],
+		blad_1M_new[Regimes[[2]],20+R2ARMAXW[[1]]],
+		blad_1M_new[Regimes[[3]],20+R3ARMAXW[[1]]]
+	),
+	c(
+		blad_3M_new[Regimes[[1]],20+R1ARMAXW[[2]]],
+		blad_3M_new[Regimes[[2]],20+R2ARMAXW[[2]]],
+		blad_3M_new[Regimes[[3]][Regimes[[3]]<=53],20+R3ARMAXW[[2]]],
+		rep(NA,2)
+	),
+	c(
+		blad_6M_new[Regimes[[1]],20+R1ARMAXW[[3]]],
+		blad_6M_new[Regimes[[2]],20+R2ARMAXW[[3]]],
+		blad_6M_new[Regimes[[3]][Regimes[[3]]<=50],20+R3ARMAXW[[3]]],
+		rep(NA,5)
+	),
+	c(
+		blad_12M_new[Regimes[[1]],20+R1ARMAXW[[4]]],
+		blad_12M_new[Regimes[[2]],20+R2ARMAXW[[4]]],
+		blad_12M_new[Regimes[[3]][Regimes[[3]]<=44],20+R3ARMAXW[[4]]],
+		rep(NA,11)
+	)
+)
+
+best_bledy_lstar<-cbind(
+	c(
+		blad_1M_new[Regimes[[1]],29+R1LSTAR[[1]]],
+		blad_1M_new[Regimes[[2]],29+R2LSTAR[[1]]],
+		blad_1M_new[Regimes[[3]],29+R3LSTAR[[1]]]
+	),
+	c(
+		blad_3M_new[Regimes[[1]],29+R1LSTAR[[2]]],
+		blad_3M_new[Regimes[[2]],29+R2LSTAR[[2]]],
+		blad_3M_new[Regimes[[3]][Regimes[[3]]<=53],29+R3LSTAR[[2]]],
+		rep(NA,2)
+	),
+	c(
+		blad_6M_new[Regimes[[1]],29+R1LSTAR[[3]]],
+		blad_6M_new[Regimes[[2]],29+R2LSTAR[[3]]],
+		blad_6M_new[Regimes[[3]][Regimes[[3]]<=50],29+R3LSTAR[[3]]],
+		rep(NA,5)
+	),
+	c(
+		blad_12M_new[Regimes[[1]],29+R1LSTAR[[4]]],
+		blad_12M_new[Regimes[[2]],29+R2LSTAR[[4]]],
+		blad_12M_new[Regimes[[3]][Regimes[[3]]<=44],29+R3LSTAR[[4]]],
+		rep(NA,11)
+	)
+)
+
+best_bledy_lstar_wwuk<-cbind(
+	c(
+		blad_1M_new[Regimes[[1]],33+R1LSTARWWUK[[1]]],
+		blad_1M_new[Regimes[[2]],33+R2LSTARWWUK[[1]]],
+		blad_1M_new[Regimes[[3]],33+R3LSTARWWUK[[1]]]
+	),
+	c(
+		blad_3M_new[Regimes[[1]],33+R1LSTARWWUK[[2]]],
+		blad_3M_new[Regimes[[2]],33+R2LSTARWWUK[[2]]],
+		blad_3M_new[Regimes[[3]][Regimes[[3]]<=53],33+R3LSTARWWUK[[2]]],
+		rep(NA,2)
+	),
+	c(
+		blad_6M_new[Regimes[[1]],33+R1LSTARWWUK[[3]]],
+		blad_6M_new[Regimes[[2]],33+R2LSTARWWUK[[3]]],
+		blad_6M_new[Regimes[[3]][Regimes[[3]]<=50],33+R3LSTARWWUK[[3]]],
+		rep(NA,5)
+	),
+	c(
+		blad_12M_new[Regimes[[1]],33+R1LSTARWWUK[[4]]],
+		blad_12M_new[Regimes[[2]],33+R2LSTARWWUK[[4]]],
+		blad_12M_new[Regimes[[3]][Regimes[[3]]<=44],33+R3LSTARWWUK[[4]]],
+		rep(NA,11)
+	)
+)
+
+
+
+best_bledy_armaxgt<-cbind(
+	c(
+		blad_1M_new[Regimes[[1]],37+R1ARMAXGT[[1]]],
+		blad_1M_new[Regimes[[2]],37+R2ARMAXGT[[1]]],
+		blad_1M_new[Regimes[[3]],37+R3ARMAXGT[[1]]]
+	),
+	c(
+		blad_3M_new[Regimes[[1]],37+R1ARMAXGT[[2]]],
+		blad_3M_new[Regimes[[2]],37+R2ARMAXGT[[2]]],
+		blad_3M_new[Regimes[[3]][Regimes[[3]]<=53],37+R3ARMAXGT[[2]]],
+		rep(NA,2)
+	),
+	c(
+		blad_6M_new[Regimes[[1]],37+R1ARMAXGT[[3]]],
+		blad_6M_new[Regimes[[2]],37+R2ARMAXGT[[3]]],
+		blad_6M_new[Regimes[[3]][Regimes[[3]]<=50],37+R3ARMAXGT[[3]]],
+		rep(NA,5)
+	),
+	c(
+		blad_12M_new[Regimes[[1]],37+R1ARMAXGT[[4]]],
+		blad_12M_new[Regimes[[2]],37+R2ARMAXGT[[4]]],
+		blad_12M_new[Regimes[[3]][Regimes[[3]]<=44],37+R3ARMAXGT[[4]]],
+		rep(NA,11)
+	)
+)
+
+
+best_bledy_arrnet<-cbind(
+	c(
+		blad_1M_new[Regimes[[1]],46+R1ARNET[[1]]],
+		blad_1M_new[Regimes[[2]],46+R2ARNET[[1]]],
+		blad_1M_new[Regimes[[3]],46+R3ARNET[[1]]]
+
+	),
+	c(
+		blad_3M_new[Regimes[[1]],46+R1ARNET[[2]]],
+		blad_3M_new[Regimes[[2]],46+R2ARNET[[2]]],
+		blad_3M_new[Regimes[[3]][Regimes[[3]]<=53],46+R3ARNET[[2]]],
+		rep(NA,2)
+	),
+	c(
+		blad_6M_new[Regimes[[1]],46+R1ARNET[[3]]],
+		blad_6M_new[Regimes[[2]],46+R2ARNET[[3]]],
+		blad_6M_new[Regimes[[3]][Regimes[[3]]<=50],46+R3ARNET[[3]]],
+		rep(NA,5)
+	),
+	c(
+		blad_12M_new[Regimes[[1]],46+R1ARNET[[4]]],
+		blad_12M_new[Regimes[[2]],46+R2ARNET[[4]]],
+		blad_12M_new[Regimes[[3]][Regimes[[3]]<=44],46+R3ARNET[[4]]],
+		rep(NA,11)
+	)
+)
+
+
+best_bledy_gnet<-cbind(
+	c(
+		blad_1M_new[Regimes[[1]],64+R1GNET[[1]]],
+		blad_1M_new[Regimes[[2]],64+R2GNET[[1]]],
+		blad_1M_new[Regimes[[3]],64+R3GNET[[1]]]
+	),
+	c(
+		blad_3M_new[Regimes[[1]],64+R1GNET[[2]]],
+		blad_3M_new[Regimes[[2]],64+R2GNET[[2]]],
+		blad_3M_new[Regimes[[3]][Regimes[[3]]<=53],64+R3GNET[[2]]],
+		rep(NA,2)
+	),
+	c(
+		blad_6M_new[Regimes[[1]],64+R1GNET[[3]]],
+		blad_6M_new[Regimes[[2]],64+R2GNET[[3]]],
+		blad_6M_new[Regimes[[3]][Regimes[[3]]<=50],64+R3GNET[[3]]],
+		rep(NA,5)
+	),
+	c(
+		blad_12M_new[Regimes[[1]],64+R1GNET[[4]]],
+		blad_12M_new[Regimes[[2]],64+R2GNET[[4]]],
+		blad_12M_new[Regimes[[3]][Regimes[[3]]<=44],64+R3GNET[[4]]],
+		rep(NA,11)
+	)
+)
+
+best_bledy_gnet_mean<-cbind(
+	c(
+		blad_1M_new[Regimes[[1]],73+R1GNETMEAN[[1]]],
+		blad_1M_new[Regimes[[2]],73+R2GNETMEAN[[1]]],
+		blad_1M_new[Regimes[[3]],73+R3GNETMEAN[[1]]]
+	),
+	c(
+		blad_3M_new[Regimes[[1]],73+R1GNETMEAN[[2]]],
+		blad_3M_new[Regimes[[2]],73+R2GNETMEAN[[2]]],
+		blad_3M_new[Regimes[[3]][Regimes[[3]]<=53],73+R3GNETMEAN[[2]]],
+		rep(NA,2)
+	),
+	c(
+		blad_6M_new[Regimes[[1]],73+R1GNETMEAN[[3]]],
+		blad_6M_new[Regimes[[2]],73+R2GNETMEAN[[3]]],
+		blad_6M_new[Regimes[[3]][Regimes[[3]]<=50],73+R3GNETMEAN[[3]]],
+		rep(NA,5)
+	),
+	c(
+		blad_12M_new[Regimes[[1]],73+R1GNETMEAN[[4]]],
+		blad_12M_new[Regimes[[2]],73+R2GNETMEAN[[4]]],
+		blad_12M_new[Regimes[[3]][Regimes[[3]]<=44],73+R3GNETMEAN[[4]]],
+		rep(NA,11)
+	)
+)
+
+
+
+
+
+
