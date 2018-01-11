@@ -1,44 +1,61 @@
 ### RMSE
-rmse<-function(x){
+rmse<-function(x,type="rmse"){
 	x<-na.omit(x)
 	x<-x[x<Inf]
-	return(sqrt(mean(x^2)))
-	#return(mean(abs(x)))
+	if(type=="rmse"){
+		return(sqrt(mean(x^2)))
+	} else if(type=="mse"){
+		return(mean(abs(x)))
+	}
 }
 
 ### SENTIMENT EXTRACTION
-get_sents<-function(f_dane){
-	u_oS<-matrix(0,4,4)
-	u_oS[1,c(2)]<-NA
-	u_oS[2,c(1)]<-NA
-	u_oS[3,c(1,4)]<-NA
-	u_oS[4,c(2,3)]<-NA
-	diag(u_oS)<-1
+get_sents<-function(f_dane,Amat,opoznienie,szlif,frek=12){
+	f_poczatek<-c(1,1,1)
+	if(sum(class(dane_var)=="ts")>0){
+		f_poczatek[1]<-start(f_dane)[1]	
+		f_poczatek[2]<-start(f_dane)[2]	
+		f_poczatek[3]<-start(f_dane)[3]	
+		f_poczatek[is.na(f_poczatek)]<-1
+		f_poczatek<-as.Date(paste(f_poczatek[1],f_poczatek[2],f_poczatek[3]),"%Y %m %d")
+		f_poczatek<-f_poczatek+
+				years(
+					if(frek==1){opoznienie}else{0}
+				)+
+				months(
+					if(frek==12){opoznienie}else{0}
+				)+
+				days(
+					if(frek==365){opoznienie}else{0}
+				)
+		f_poczatek<-c(year(f_poczatek),month(f_poczatek),day(f_poczatek))
+	}
 
-	Bmat<-matrix(0,4,4)
+	Bmat<-matrix(0,ncol(f_dane),ncol(f_dane))
 	diag(Bmat)<-NA
 
-	model_var<-VAR(f_dane,p=p_lag)
-	model_svar<-SVAR(model_var,max.iter=1000,Amat=u_oS,Bmat=Bmat,estmethod="direct")
+	model_var<-VAR(f_dane,p=opoznienie)
+	model_svar<-SVAR(model_var,max.iter=1000,Amat=Amat,Bmat=Bmat,estmethod="direct")
 
 	t(residuals(model_var))->res
 
 	signal<-(solve(model_svar$A)%*%model_svar$B%*%res)
-	signal<-t(apply(signal,1,function(x){(x)/sd(x)}))
+	signal<-apply(signal,1,function(x){(x)/sd(x)})
 
-	x2<-cbind(
-		signal[3,]-signal[2,],
-		signal[4,]-signal[1,]
-	)
-
+	x2<-NULL
+	for(fi in 1:(ncol(f_dane)/2)){
+		x2<-cbind(x2,
+			signal[,(ncol(f_dane)/2)+fi]-apply(as.matrix(signal[,c(1:(ncol(f_dane)/2))[-fi]]),1,sum)
+		)
+	}
 	#x2<-apply(x2,2,function(x){(x-mean(x))/sd(x)})
 	x2<-apply(x2,1,sum)
 	x2<-c(
-		forecast(arima(rev(x2),order=c(3,0,0)),h=3)$mean,
+		forecast::forecast(arima(rev(x2),order=c(3,0,0)),h=3)$mean,
 		x2,
-		forecast(arima(x2,order=c(3,0,0)),h=3)$mean
+		forecast::forecast(arima(x2,order=c(3,0,0)),h=3)$mean
 	)
-	return(list(sent=tail(head(hpfilter(ts(x2,start=c(2007,3),freq=12),type="lambda",freq=2)$trend,-3),-3)/2,media=hpfilter(ts(x2,freq=1),type="lambda",freq=1)$cycle))
+	return(list(sent=ts(tail(head(hpfilter(x2,type="lambda",freq=szlif)$trend,-3),-3),start=f_poczatek,freq=frek),media=ts(tail(head(hpfilter(x2,type="lambda",freq=szlif)$cycle,-3),-3),start=f_poczatek,freq=frek)))
 }
 
 ### DATA ARRAY 
@@ -54,6 +71,7 @@ inter_daty<-function(pocz,kon){
 
 ### DATES
 daty<-function(pocz,n){
+
 	kon<-pocz
 	month(kon)<-month(kon)+nrow(dane_m)
 	day(kon)<-day(kon)-1
@@ -708,28 +726,43 @@ plot_senty<-function(f_dane,dl){
 	
 	TOPLOT<-array(NA,dim=c(57,118))
 
-for (i in 3:57){
+	for (i in 3:57){
 		plsnt<-rep(NA,117)
 		f_dane_var<-ts(f_dane[(i-1):(i+dl-1),],start=c(1,1),freq=12)
 		f_rynek<-ts(f_dane_var[-(1:p_lag),2],start=c(1,1),freq=12)
 		f_wwuk<-ts(f_dane_var[-(1:p_lag),3],start=c(1,1),freq=12)
 		f_sent<-ts(c(get_sents(f_dane_var[,-c(3,6,7)])$sent),start=c(1,1),freq=12)
 		TOPLOT[i,i:(i+58)]<-f_sent
-}
+	}
 
-TOPLOT<-ts(t(TOPLOT),start=c(2007,5),freq=12)
+	TOPLOT<-ts(t(TOPLOT),start=c(2007,5),freq=12)
 
-plot(-TOPLOT[,3],type="l",ylim=c(-3,1.5),ylab="Sentiment",xlab="Year")
-for(i in 4:57){
-lines(-TOPLOT[,i])
-}
+	plot(-TOPLOT[,3],type="l",ylim=c(-3,1.5),ylab="Sentiment",xlab="Year")
+	for(i in 4:57){
+		lines(-TOPLOT[,i])
+	}
 }
 
 my_dm.test<-function(x,y,hor){
-zwroc<-NULL
-for (i in 1:4){
-	zwroc<-c(zwroc,dm.test(na.omit(x[x[,i]<Inf,i]),na.omit(y[x[,i]<Inf,i]),h=hor[i],alternative="less")$p.value)
+	zwroc<-NULL
+	for (i in 1:4){
+		zwroc<-c(zwroc,dm.test(na.omit(x[x[,i]<Inf,i]),na.omit(y[x[,i]<Inf,i]),h=hor[i],alternative="less")$p.value)
+	}
+	return(zwroc)
 }
-return(zwroc)
+
+analiza_spektralna<-function(f_sent){
+	dev.new()
+	x.spec <- spectrum(f_sent,span=12,log="no",plot=FALSE)
+	spx <- x.spec$freq
+	spx<-spx/mean(diff(spx))
+	spy <- 2*x.spec$spec
+	plot(spy~spx,xlab="frequency",ylab="density",main="smoothed spectral density",type="l")
+	abline(v=which.max(spy),col="blue",lty=4)
+	mtext(
+		which.max(spy),
+		3,
+		adj=(which.max(spy)+3)/max(spx),col="blue")
 }
+
 
